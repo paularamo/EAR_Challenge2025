@@ -1,47 +1,47 @@
 # If you are not sure what all these fields mean, please refer our documentation here:
 # https://evalai.readthedocs.io/en/latest/configuration.html
-title: Random Number Generator Challenge
-short_description: Random number generation challenge for each submission
+title: Elderly Action Recognition Challenge at WACV2025
+short_description: The Elderly Action Recognition Challenge is your chance to make a real impact! Imagine safeguarding the lives of our elderly relatives.
 description: templates/description.html
 evaluation_details: templates/evaluation_details.html
 terms_and_conditions: templates/terms_and_conditions.html
 image: logo.jpg
 submission_guidelines: templates/submission_guidelines.html
-leaderboard_description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras egestas a libero nec sagittis.
+leaderboard_description: Average Accuracy across the evaluation datasets (Metric1), and Precision, Recall, F1-Score, and confusion matrix insights (Metric2).
 evaluation_script: evaluation_script.zip
 remote_evaluation: False
 is_docker_based: False
-start_date: 2019-01-01 00:00:00
-end_date: 2099-05-31 23:59:59
+start_date: 2024-01-10 00:00:00
+end_date: 2024-02-15 23:59:59
 published: True
 
 leaderboard:
   - id: 1
     schema:
       {
-        "labels": ["Metric1", "Metric2", "Metric3", "Total"],
-        "default_order_by": "Total",
+        "labels": ["Metric1", "Metric2"],
+        "default_order_by": "Metric1",
         "metadata": {
           "Metric1": {
             "sort_ascending": True,
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+            "description": "Average Accuracy across the evaluation datasets.",
           },
           "Metric2": {
             "sort_ascending": True,
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+            "description": "Precision, Recall, F1-Score, and confusion matrix insights.",
           }
         }
       }
 
 challenge_phases:
   - id: 1
-    name: Dev Phase
+    name: Unique phase
     description: templates/challenge_phase_1_description.html
-    leaderboard_public: False
+    leaderboard_public: True
     is_public: True
     is_submission_public: True
-    start_date: 2019-01-19 00:00:00
-    end_date: 2099-04-25 23:59:59
+    start_date: 2024-01-10 00:00:00
+    end_date: 2024-02-15 23:59:59
     test_annotation_file: annotations/test_annotations_devsplit.json
     codename: dev
     max_submissions_per_day: 5
