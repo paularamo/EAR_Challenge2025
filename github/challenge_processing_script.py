@@ -45,12 +45,12 @@ if __name__ == "__main__":
 
     # Fetching the url
     if VALIDATION_STEP == "True":
-        url = "{}{}".format("https://",
+        url = "{}{}".format(
             EVALAI_HOST_URL,
             CHALLENGE_CONFIG_VALIDATION_URL.format(CHALLENGE_HOST_TEAM_PK),
         )
     else:
-        url = "{}{}".format("https://",
+        url = "{}{}".format(
             EVALAI_HOST_URL,
             CHALLENGE_CREATE_OR_UPDATE_URL.format(CHALLENGE_HOST_TEAM_PK),
         )
