@@ -1,8 +1,48 @@
-<p>"Given a path to mp4, the evaluation script should intake the video and output category + label. The evaluation framework will use the following metrics to ensure a fair and comprehensive assessment:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluation Framework</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+        h1 {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 1em;
+        }
+        h2 {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 1em;
+        }
+        p {
+            margin: 0.5em 0;
+        }
+        ul {
+            margin: 0.5em 0;
+            padding-left: 1.5em;
+        }
+        li {
+            margin: 0.3em 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Evaluation</h1>
+    <p>Given a path to an MP4 file, the evaluation script should intake the video and output the category and label. The evaluation framework will use the following metrics to ensure a fair and comprehensive assessment:</p>
 
-Primary Metric: Average Accuracy across the evaluation datasets
-Secondary Metrics: Precision, Recall, F1-Score, and confusion matrix insights
-  
-  Evaluation Script
-An evaluation script will calculate all metrics and provide a leaderboard ranking. The script will not be accessible during training. In the event of tied scores, secondary metrics will determine leaderboard positions.
-  "</p>
+    <h2>Metrics</h2>
+    <ul>
+        <li><strong>Primary Metric:</strong> Average Accuracy across the evaluation datasets</li>
+        <li><strong>Secondary Metrics:</strong> Precision, Recall, F1-Score, and confusion matrix insights</li>
+    </ul>
+
+    <h2>Evaluation Script</h2>
+    <p>An evaluation script will calculate all metrics and provide a leaderboard ranking. The script will not be accessible during training. In the event of tied scores, secondary metrics will determine leaderboard positions.</p>
+</body>
+</html>
