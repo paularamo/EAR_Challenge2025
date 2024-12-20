@@ -91,9 +91,9 @@ challenge_phases:
     max_submissions: 50
     default_submission_meta_attributes:
       - name: method_name
-        is_visible: True
+        is_visible: False
       - name: method_description
-        is_visible: True
+        is_visible: False
       - name: project_url
         is_visible: True
       - name: publication_url
