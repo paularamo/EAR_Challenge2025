@@ -1,3 +1,26 @@
 {
-	"foo": "bar"
+    "HF_Link": "https://huggingface.co/models/example-model",
+    "PDF_Link": "https://example.com/report.pdf",
+    "annotations": [
+        {
+            "video_id": "video1",
+            "true_label": "walking"
+        },
+        {
+            "video_id": "video2",
+            "true_label": "eating"
+        },
+        {
+            "video_id": "video3",
+            "true_label": "cleaning"
+        },
+        {
+            "video_id": "video4",
+            "true_label": "exercising"
+        },
+        {
+            "video_id": "video5",
+            "true_label": "talking"
+        }
+    ]
 }

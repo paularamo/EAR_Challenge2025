@@ -1,81 +1,127 @@
-import random
+import json
+import re
+import requests
+from sklearn.metrics import accuracy_score, f1_score
 
-
-def evaluate(test_annotation_file, user_submission_file, phase_codename, **kwargs):
-    print("Starting Evaluation.....")
+def validate_url(url, url_type):
     """
-    Evaluates the submission for a particular challenge phase and returns score
-    Arguments:
+    Validate a URL by checking its format and attempting a HEAD request.
+    
+    Args:
+        url (str): The URL to validate.
+        url_type (str): Type of URL (e.g., 'Model Link', 'PDF Report').
 
-        `test_annotations_file`: Path to test_annotation_file on the server
-        `user_submission_file`: Path to file submitted by the user
-        `phase_codename`: Phase to which submission is made
-
-        `**kwargs`: keyword arguments that contains additional submission
-        metadata that challenge hosts can use to send slack notification.
-        You can access the submission metadata
-        with kwargs['submission_metadata']
-
-        Example: A sample submission metadata can be accessed like this:
-        >>> print(kwargs['submission_metadata'])
-        {
-            'status': u'running',
-            'when_made_public': None,
-            'participant_team': 5,
-            'input_file': 'https://abc.xyz/path/to/submission/file.json',
-            'execution_time': u'123',
-            'publication_url': u'ABC',
-            'challenge_phase': 1,
-            'created_by': u'ABC',
-            'stdout_file': 'https://abc.xyz/path/to/stdout/file.json',
-            'method_name': u'Test',
-            'stderr_file': 'https://abc.xyz/path/to/stderr/file.json',
-            'participant_team_name': u'Test Team',
-            'project_url': u'http://foo.bar',
-            'method_description': u'ABC',
-            'is_public': False,
-            'submission_result_file': 'https://abc.xyz/path/result/file.json',
-            'id': 123,
-            'submitted_at': u'2017-03-20T19:22:03.880652Z'
-        }
+    Returns:
+        bool: True if the URL is valid, otherwise False.
     """
+    # Basic URL format validation
+    regex = re.compile(
+        r'^(https?:\/\/)?'  # http:// or https://
+        r'(([a-zA-Z0-9_-]+\.)+[a-zA-Z]{2,})'  # Domain name
+        r'(\/[-a-zA-Z0-9@:%_+.~#?&/=]*)?$'  # Path
+    )
+    if not re.match(regex, url):
+        print(f"Invalid {url_type} URL format: {url}")
+        return False
+
+    # Attempting a HEAD request to check URL reachability
+    try:
+        response = requests.head(url, allow_redirects=True, timeout=10)
+        if response.status_code == 200:
+            return True
+        else:
+            print(f"{url_type} URL not reachable (Status code: {response.status_code}): {url}")
+            return False
+    except requests.RequestException as e:
+        print(f"Error validating {url_type} URL: {url}. Error: {e}")
+        return False
+
+def evaluate(submission_file, ground_truth_file, phase_code, leaderboard_threshold=0.9, **kwargs):
+    """
+    Evaluate the participant's submission.
+    
+    Args:
+        submission_file (str): Path to the participant's submission JSON file.
+        ground_truth_file (str): Path to the ground truth JSON file.
+        phase_code (str): The phase code of the evaluation ("dev" or "test").
+        leaderboard_threshold (float): Threshold to determine if results are in the top leaderboard.
+        **kwargs: Additional arguments for communication, such as a Discord webhook.
+        
+    Returns:
+        dict: Evaluation metrics including accuracy, F1-score, and link validation results.
+    """
+    # Optional: Notify via Discord if webhook is provided
+    discord_webhook = kwargs.get("discord_webhook")
+
     output = {}
-    if phase_codename == "dev":
-        print("Evaluating for Dev Phase")
-        output["result"] = [
+
+    # Load the ground truth
+    with open(ground_truth_file, "r") as gt_file:
+        ground_truth_data = json.load(gt_file)
+
+    # Load the submission
+    with open(submission_file, "r") as sub_file:
+        submission_data = json.load(sub_file)
+
+    # Validate URLs
+    model_link_valid = 1 if validate_url(submission_data.get("HF_Link", ""), "Model Link") else 0
+    pdf_link_valid = 1 if validate_url(submission_data.get("PDF_Link", ""), "PDF Report") else 0
+
+    if model_link_valid == 0 or pdf_link_valid == 0:
+        raise ValueError("Submission contains invalid Model Link or PDF Report URL.")
+
+    # Parse predictions and true labels
+    ground_truth = {item["video_id"]: item["true_label"] for item in ground_truth_data["annotations"]}
+    submission = {item["video_id"]: item["prediction"] for item in submission_data["predictions"]}
+
+    # Ensure submission and ground truth match
+    if set(submission.keys()) != set(ground_truth.keys()):
+        raise ValueError("Submission and ground truth files must have the same video keys.")
+
+    # Extract predictions and true labels
+    y_true = [ground_truth[video_id] for video_id in ground_truth]
+    y_pred = [submission[video_id] for video_id in submission]
+
+    # Calculate evaluation metrics
+    accuracy = accuracy_score(y_true, y_pred)
+    f1 = f1_score(y_true, y_pred, average='weighted')
+
+    # Check if the submission qualifies for the top leaderboard
+    if accuracy >= leaderboard_threshold and discord_webhook:
+        try:
+            requests.post(discord_webhook, json={
+                "content": f"Submission in phase '{phase_code}' achieved top leaderboard status with accuracy: {accuracy:.2f}."
+            })
+        except requests.RequestException as e:
+            print(f"Error sending notification to Discord: {e}")
+    
+    output["result"] = [
             {
                 "train_split": {
-                    "Metric1": random.randint(0, 99),
-                    "Metric2": random.randint(0, 99),
-                    "Metric3": random.randint(0, 99),
-                    "Total": random.randint(0, 99),
+                    "accuracy": accuracy,
+                    "f1_score": f1,
+                    "model_link_valid": model_link_valid,
+                    "pdf_link_valid": pdf_link_valid
                 }
             }
         ]
-        # To display the results in the result file
-        output["submission_result"] = output["result"][0]["train_split"]
-        print("Completed evaluation for Dev Phase")
-    elif phase_codename == "test":
-        print("Evaluating for Test Phase")
-        output["result"] = [
-            {
-                "train_split": {
-                    "Metric1": random.randint(0, 99),
-                    "Metric2": random.randint(0, 99),
-                    "Metric3": random.randint(0, 99),
-                    "Total": random.randint(0, 99),
-                }
-            },
-            {
-                "test_split": {
-                    "Metric1": random.randint(0, 99),
-                    "Metric2": random.randint(0, 99),
-                    "Metric3": random.randint(0, 99),
-                    "Total": random.randint(0, 99),
-                }
-            },
-        ]
-        # To display the results in the result file
-        output["submission_result"] = output["result"][0]
-        print("Completed evaluation for Test Phase")
-    return output
+    output["submission_result"] = output["result"][0]["train_split"]
+    print("Completed evaluation for Dev Phase")
+    print(output)
+
+    # Return metrics
+    #return {
+    #    "accuracy": accuracy,
+    #    "f1_score": f1,
+    #    "model_link_valid": model_link_valid,
+    #    "pdf_link_valid": pdf_link_valid
+    #}
+
+# Example usage (for debugging purposes)
+#if __name__ == "__main__":
+#    submission_path = "submission.json"  # Replace with actual submission file path
+#    ground_truth_path = "annotations/test_annotations_testsplit.json"  # Replace with actual ground truth file path
+#    phase = "test"  # or "test" "dev"
+#    discord_hook = "https://discord.com/api/webhooks/1319704452093186118/pU1pn_lH-A1vOu5IxlHmCJn-Zy9PybyH_ra5dWclQAJcrai1vaHuEYhGI9W0EG7dmbn-"  # Replace with actual webhook URL
+#    results = evaluate(submission_path, ground_truth_path, phase, leaderboard_threshold=0.9, discord_webhook=discord_hook)
+#    print(results)
