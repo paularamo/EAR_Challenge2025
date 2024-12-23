@@ -36,7 +36,7 @@ def validate_url(url, url_type):
         print(f"Error validating {url_type} URL: {url}. Error: {e}")
         return False
 
-def evaluate(submission_file, ground_truth_file, phase_code, leaderboard_threshold=0.9, **kwargs):
+def evaluate(ground_truth_file, submission_file, phase_code, leaderboard_threshold=0.9, **kwargs):
     """
     Evaluate the participant's submission.
     
