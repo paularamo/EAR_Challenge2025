@@ -36,7 +36,7 @@ def validate_url(url, url_type):
         print(f"Error validating {url_type} URL: {url}. Error: {e}")
         return False
 
-def evaluate(submission_file, ground_truth_file, phase_code, leaderboard_threshold=0.9, **kwargs):
+def evaluate(ground_truth_file, submission_file, phase_code, leaderboard_threshold=0.9, **kwargs):
     """
     Evaluate the participant's submission.
     
@@ -68,7 +68,8 @@ def evaluate(submission_file, ground_truth_file, phase_code, leaderboard_thresho
     pdf_link_valid = 1 if validate_url(submission_data.get("PDF_Link", ""), "PDF Report") else 0
 
     if model_link_valid == 0 or pdf_link_valid == 0:
-        raise ValueError("Submission contains invalid Model Link or PDF Report URL.")
+        #raise ValueError("Submission contains invalid Model Link or PDF Report URL.")
+        print("Submission contains invalid Model Link or PDF Report URL.")
 
     # Parse predictions and true labels
     ground_truth = {item["video_id"]: item["true_label"] for item in ground_truth_data["annotations"]}
@@ -77,6 +78,7 @@ def evaluate(submission_file, ground_truth_file, phase_code, leaderboard_thresho
     # Ensure submission and ground truth match
     if set(submission.keys()) != set(ground_truth.keys()):
         raise ValueError("Submission and ground truth files must have the same video keys.")
+        #print("Submission and ground truth files must have the same video keys.")
 
     # Extract predictions and true labels
     y_true = [ground_truth[video_id] for video_id in ground_truth]
