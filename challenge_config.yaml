@@ -26,10 +26,6 @@ leaderboard:
             "sort_ascending": True,
             "description": "Average Accuracy across the evaluation datasets.",
           },
-          "F1-Score": {
-            "sort_ascending": True,
-            "description": "F1-Score",
-          }
         }
       }
 
@@ -44,9 +40,9 @@ challenge_phases:
     end_date: 2099-02-15 23:59:59
     test_annotation_file: annotations/test_annotations_devsplit.json
     codename: dev
-    max_submissions_per_day: 5
-    max_submissions_per_month: 50
-    max_submissions: 50
+    max_submissions_per_day: 10
+    max_submissions_per_month: 300
+    max_submissions: 300
     default_submission_meta_attributes:
       - name: method_name
         is_visible: False
@@ -69,9 +65,9 @@ challenge_phases:
     end_date: 2099-05-24 23:59:59
     test_annotation_file: annotations/test_annotations_testsplit.json
     codename: test
-    max_submissions_per_day: 5
-    max_submissions_per_month: 50
-    max_submissions: 50
+    max_submissions_per_day: 50
+    max_submissions_per_month: 1000
+    max_submissions: 10000
     default_submission_meta_attributes:
       - name: method_name
         is_visible: False
