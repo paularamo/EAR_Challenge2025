@@ -56,7 +56,7 @@ def run():
         leaderboard_threshold=0.9,
         submission_metadata=submission_metadata,
     )
-    print("Evaluated Successfully! - TEST")
+    print("Evaluated Successfully!")
 
 
 if __name__ == "__main__":
