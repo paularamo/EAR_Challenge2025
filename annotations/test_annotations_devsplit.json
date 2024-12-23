@@ -1,6 +1,6 @@
 {
-    "HF_Link": "https://huggingface.co/models/example-model",
-    "PDF_Link": "https://example.com/report.pdf",
+   "HF_Link": "https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct",
+    "PDF_Link": "https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Redmon_You_Only_Look_CVPR_2016_paper.pdf",
     "annotations": [
         {
             "video_id": "video1",
