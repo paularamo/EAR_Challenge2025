@@ -109,6 +109,8 @@ def evaluate(submission_file, ground_truth_file, phase_code, leaderboard_thresho
     print("Completed evaluation for Dev Phase")
     print(output)
 
+    return output
+
     # Return metrics
     #return {
     #    "accuracy": accuracy,
