@@ -50,8 +50,8 @@ def run():
         "discord_webhook": "https://discord.com/api/webhooks/1319704452093186118/pU1pn_lH-A1vOu5IxlHmCJn-Zy9PybyH_ra5dWclQAJcrai1vaHuEYhGI9W0EG7dmbn-"
     }
     EVALUATION_SCRIPTS[challenge_id].evaluate(
-        user_submission_file_path,
         annotation_file_path,
+        user_submission_file_path,
         challenge_phase,
         leaderboard_threshold=0.9,
         submission_metadata=submission_metadata,
