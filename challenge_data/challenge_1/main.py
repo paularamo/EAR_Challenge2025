@@ -72,8 +72,8 @@ def evaluate(ground_truth_file, submission_file, phase_code, leaderboard_thresho
         print("Submission contains invalid Model Link or PDF Report URL.")
 
     # Parse predictions and true labels
-    ground_truth = {item["video_id"]: item["true_label"] for item in ground_truth_data["annotations"]}
-    submission = {item["video_id"]: item["prediction"] for item in submission_data["predictions"]}
+    ground_truth = {item["video_id"]: item["action_category"] for item in ground_truth_data["annotations"]}
+    submission = {item["video_id"]: item["action_category"] for item in submission_data["predictions"]}
 
     # Ensure submission and ground truth match
     if set(submission.keys()) != set(ground_truth.keys()):
