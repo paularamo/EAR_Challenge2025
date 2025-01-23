@@ -36,7 +36,7 @@ def validate_url(url, url_type):
         print(f"Error validating {url_type} URL: {url}. Error: {e}")
         return False
 
-def evaluate(ground_truth_file, submission_file, phase_code, leaderboard_threshold=0.9, **kwargs):
+def evaluate(submission_file, ground_truth_file, phase_code, leaderboard_threshold=0.9, **kwargs):
     """
     Evaluate the participant's submission.
     
@@ -62,6 +62,9 @@ def evaluate(ground_truth_file, submission_file, phase_code, leaderboard_thresho
     # Load the submission
     with open(submission_file, "r") as sub_file:
         submission_data = json.load(sub_file)
+
+    print("GT:" , ground_truth_file)
+    print("SF", submission_file)
 
     # Validate URLs
     model_link_valid = 1 if validate_url(submission_data.get("HF_Link", ""), "Model Link") else 0

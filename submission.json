@@ -1,7 +1,7 @@
 {
     "HF_Link": "https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct",
     "PDF_Link": "https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Redmon_You_Only_Look_CVPR_2016_paper.pdf",
-    "annotations": [
+    "predictions": [
         {
             "video_id": "0000.mp4",
             "action_category": "eating_drinking",
