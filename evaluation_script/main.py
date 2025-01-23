@@ -63,8 +63,8 @@ def evaluate(submission_file, ground_truth_file, phase_code, leaderboard_thresho
     with open(submission_file, "r") as sub_file:
         submission_data = json.load(sub_file)
     
-    print("GT:" , ground_truth_file)
-    print("SF", submission_file)
+    #print("GT:" , ground_truth_file)
+    #print("SF", submission_file)
 
     # Validate URLs
     model_link_valid = 1 if validate_url(submission_data.get("HF_Link", ""), "Model Link") else 0
